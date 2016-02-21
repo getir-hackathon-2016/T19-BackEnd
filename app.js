@@ -2,8 +2,6 @@
 var http = require('http');
 var path = require('path');
 
-var app = express();
-
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://getir_db:123123@ds062898.mongolab.com:62898/getir');
 
@@ -16,6 +14,8 @@ var locksmith = require('./model/locksmith');
 
 // ReSharper disable once CommonJsExternalModule
 var order = require('./model/order');
+
+var app = express();
 
 // all environments
 app.set('port', process.env.PORT || 1337);
@@ -37,20 +37,6 @@ if ('development' === app.get('env')) {
     app.use(express.errorHandler());
 }
 
-//Müsait cilingirleri getir
-app.get('/AvailableLocksmiths', locksmithroute.list);
-
-//Çilingirin müsaitlik durumunu değiştir
-app.post('/ChangeAvailable', locksmithroute.changeAvailable);
-
-//Çilingirin pozisyonunu değiştir
-app.post('/ChangePosition', locksmithroute.changePosition);
-
-//Sipariş Ekle
-app.post('/AddOrder', orderroute.addOrder);
-//# sourceMappingURL=app.js.map
-
-
 var server = http.createServer(app);
 
 //socket.io singleton
@@ -67,3 +53,16 @@ server.listen(app.get('port'), function () {
 app.get('/', function (req, res) {
     res.sendfile('index.html', { root: __dirname });
 });
+
+//Müsait cilingirleri getir
+app.get('/AvailableLocksmiths', locksmithroute.list);
+
+//Çilingirin müsaitlik durumunu değiştir
+app.post('/ChangeAvailable', locksmithroute.changeAvailable);
+
+//Çilingirin pozisyonunu değiştir
+app.post('/ChangePosition', locksmithroute.changePosition);
+
+//Sipariş Ekle
+app.post('/AddOrder', orderroute.addOrder);
+//# sourceMappingURL=app.js.map
