@@ -1,0 +1,32 @@
+﻿<!doctype html>
+<html>
+<head>
+    <title>Socket.IO chat</title>
+</head>
+<body>
+    <div id="locksmits">
+        <table border="1">
+            <tr>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+        var socket = io();
+        socket.emit('load_availableLocksmiths');
+        socket.on('load_availableLocksmiths', function (msg) {
+            $.getJSON('/AvailableLocksmiths?long=29.016772&lat=41.087147&dictance=18', function (jd) {
+                $("#locksmits").html("");
+                $(jd.list).each(function (i, el) {
+                    $('#locksmits').append("<tr>");
+                    $('#locksmits').append($('<td>').text(el.officeName));
+                    $('#locksmits').append($('<td>').text(el.name + " " + el.surname));
+                    $('#locksmits').append("</tr>");
+                });
+            });
+        });
+    </script>
+</body>
+</html>
